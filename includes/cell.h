@@ -4,18 +4,25 @@
 #include <vector>
 #include <random>
 
+
+
+// Type d'être vivant
+
 enum Type { empty, plant, prey, predator };
+
+
+
+// Classe définissant une case du monde
 
 class Cell
 {
 
 public:
 
-	Type type;
-	bool done;
-	int nb_eat;
-	int time_no_eat;
-	Color color;
+	Type type;			// Type d'être vivant
+	bool done;			// Sécurité empêchant de mettre à jour deux fois le même être vivant
+	int nb_eat;			// Nombre de fois où l'animal a mangé
+	int time_no_eat;	// Temps passé sans manger
 
 	Cell();
 	Cell(const Cell& cell);

@@ -11,7 +11,6 @@ Cell::Cell()
 	done = false;
 	nb_eat = 0;
 	time_no_eat = 0;
-	color = BACKGROUND;
 }
 
 
@@ -24,7 +23,6 @@ Cell::Cell(const Cell& cell)
 	done = cell.done;
 	nb_eat = cell.nb_eat;
 	time_no_eat = cell.time_no_eat;
-	color = cell.color;
 }
 
 
@@ -37,18 +35,6 @@ Cell::Cell(Type type)
 	done = false;
 	nb_eat = 0;
 	time_no_eat = 0;
-
-	if (type == plant)
-		color = Color(0, 255, 0);
-
-	else if (type == prey)
-		color = Color(255, 255, 255);
-
-	else if (type == predator)
-		color = Color(255, 0, 0);
-
-	else
-		color = BACKGROUND;
 }
 
 
@@ -61,7 +47,6 @@ void Cell::operator=(const Cell& cell)
 	done = cell.done;
 	nb_eat = cell.nb_eat;
 	time_no_eat = cell.time_no_eat;
-	color = cell.color;
 }
 
 
@@ -91,7 +76,7 @@ void initialize_world(std::vector<std::vector<Cell>>& world, int world_width, in
 		}
 
 		world[x][y] = Cell(plant);
-		show_cell(x, y, world[x][y].color, zoom);
+		show_cell(x, y, plant, zoom);
 	}
 
 	for (int i = 0; i < nb_preys; i++)
@@ -103,7 +88,7 @@ void initialize_world(std::vector<std::vector<Cell>>& world, int world_width, in
 		}
 
 		world[x][y] = Cell(prey);
-		show_cell(x, y, world[x][y].color, zoom);
+		show_cell(x, y, plant, zoom);
 	}
 
 	for (int i = 0; i < nb_predators; i++)
@@ -115,7 +100,7 @@ void initialize_world(std::vector<std::vector<Cell>>& world, int world_width, in
 		}
 
 		world[x][y] = Cell(predator);
-		show_cell(x, y, world[x][y].color, zoom);
+		show_cell(x, y, plant, zoom);
 	}
 }
 
@@ -132,9 +117,8 @@ void grow_plant(std::vector<std::vector<Cell>>& world, int x, int y, int growth_
 	{
 		if (rand() % 100 < growth_rate)
 		{
-			cell.color = world[x - 1][y].color;
 			world[x][y] = cell;
-			show_cell(x, y, cell.color, zoom);
+			show_cell(x, y, plant, zoom);
 		}
 	}
 
@@ -142,9 +126,8 @@ void grow_plant(std::vector<std::vector<Cell>>& world, int x, int y, int growth_
 	{
 		if (rand() % 100 < growth_rate)
 		{
-			cell.color = world[x][y - 1].color;
 			world[x][y] = cell;
-			show_cell(x, y, cell.color, zoom);
+			show_cell(x, y, plant, zoom);
 		}
 	}
 
@@ -152,9 +135,8 @@ void grow_plant(std::vector<std::vector<Cell>>& world, int x, int y, int growth_
 	{
 		if (rand() % 100 < growth_rate)
 		{
-			cell.color = world[x][y + 1].color;
 			world[x][y] = cell;
-			show_cell(x, y, cell.color, zoom);
+			show_cell(x, y, plant, zoom);
 		}
 	}
 
@@ -162,9 +144,8 @@ void grow_plant(std::vector<std::vector<Cell>>& world, int x, int y, int growth_
 	{
 		if (rand() % 100 < growth_rate)
 		{
-			cell.color = world[x + 1][y].color;
 			world[x][y] = cell;
-			show_cell(x, y, cell.color, zoom);
+			show_cell(x, y, plant, zoom);
 		}
 	}
 }
@@ -187,7 +168,7 @@ void update_world(std::vector<std::vector<Cell>>& world)
 
 
 
-//Donne un ordre aléatoire de 4 valeurs
+// Donne un ordre aléatoire de 4 valeurs
 
 std::vector<int> random_order_4()
 {

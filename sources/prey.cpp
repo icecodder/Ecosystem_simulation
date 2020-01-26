@@ -2,6 +2,9 @@
 #include "prey.h"
 
 
+
+// Met à jour l'état d'une proie
+
 void update_prey(std::vector<std::vector<Cell>>& world, int x, int y, int zoom, int prey_time_no_eat_max, int prey_nb_eat_kid, int number_plants)
 {
 	world[x][y].done = true;
@@ -9,7 +12,7 @@ void update_prey(std::vector<std::vector<Cell>>& world, int x, int y, int zoom, 
 	if (world[x][y].time_no_eat >= prey_time_no_eat_max)
 	{
 		world[x][y] = Cell();
-		show_cell(x, y, world[x][y].color, zoom);
+		show_cell(x, y, empty, zoom);
 		return;
 	}
 
@@ -39,6 +42,8 @@ void update_prey(std::vector<std::vector<Cell>>& world, int x, int y, int zoom, 
 
 
 
+// Fais bouger une proie vers la plante la plus proche
+
 void move_prey(std::vector<std::vector<Cell>>& world, int x, int y, int zoom)
 {
 	int max_size;
@@ -63,10 +68,10 @@ void move_prey(std::vector<std::vector<Cell>>& world, int x, int y, int zoom)
 				if (i >= 0 and i < world.size() and j >= 0 and j < world.front().size() and y > 0 and world[i][j].type == plant and world[x][y - 1].type == empty)
 				{
 					world[x][y - 1] = world[x][y];
-					show_cell(x, y - 1, world[x][y - 1].color, zoom);
+					show_cell(x, y - 1, prey, zoom);
 
 					world[x][y] = Cell();
-					show_cell(x, y, world[x][y].color, zoom);
+					show_cell(x, y, empty, zoom);
 
 					return;
 				}
@@ -79,10 +84,10 @@ void move_prey(std::vector<std::vector<Cell>>& world, int x, int y, int zoom)
 				if (i >= 0 and i < world.front().size() and j >= 0 and j < world.size() and x > 0 and world[j][i].type == plant and world[x - 1][y].type == empty)
 				{
 					world[x - 1][y] = world[x][y];
-					show_cell(x - 1, y, world[x - 1][y].color, zoom);
+					show_cell(x - 1, y, prey, zoom);
 
 					world[x][y] = Cell();
-					show_cell(x, y, world[x][y].color, zoom);
+					show_cell(x, y, empty, zoom);
 
 					return;
 				}
@@ -95,10 +100,10 @@ void move_prey(std::vector<std::vector<Cell>>& world, int x, int y, int zoom)
 				if (i >= 0 and i < world.size() and j >= 0 and j < world.front().size() and y < world.front().size() - 1 and world[i][j].type == plant and world[x][y + 1].type == empty)
 				{
 					world[x][y + 1] = world[x][y];
-					show_cell(x, y + 1, world[x][y + 1].color, zoom);
+					show_cell(x, y + 1, prey, zoom);
 
 					world[x][y] = Cell();
-					show_cell(x, y, world[x][y].color, zoom);
+					show_cell(x, y, empty, zoom);
 
 					return;
 				}
@@ -111,10 +116,10 @@ void move_prey(std::vector<std::vector<Cell>>& world, int x, int y, int zoom)
 				if (i >= 0 and i < world.front().size() and j >= 0 and j < world.size() and x < world.size() - 1 and world[j][i].type == plant and world[x + 1][y].type == empty)
 				{
 					world[x + 1][y] = world[x][y];
-					show_cell(x + 1, y, world[x + 1][y].color, zoom);
+					show_cell(x + 1, y, prey, zoom);
 
 					world[x][y] = Cell();
-					show_cell(x, y, world[x][y].color, zoom);
+					show_cell(x, y, empty, zoom);
 
 					return;
 				}
@@ -130,10 +135,10 @@ void move_prey(std::vector<std::vector<Cell>>& world, int x, int y, int zoom)
 				if (i >= 0 and i < world.size() and j >= 0 and j < world.front().size() and y < world.front().size() - 1 and world[i][j].type == plant and world[x][y + 1].type == empty)
 				{
 					world[x][y + 1] = world[x][y];
-					show_cell(x, y + 1, world[x][y + 1].color, zoom);
+					show_cell(x, y + 1, prey, zoom);
 
 					world[x][y] = Cell();
-					show_cell(x, y, world[x][y].color, zoom);
+					show_cell(x, y, empty, zoom);
 
 					return;
 				}
@@ -146,10 +151,10 @@ void move_prey(std::vector<std::vector<Cell>>& world, int x, int y, int zoom)
 				if (i >= 0 and i < world.front().size() and j >= 0 and j < world.size() and x < world.size() - 1 and world[j][i].type == plant and world[x + 1][y].type == empty)
 				{
 					world[x + 1][y] = world[x][y];
-					show_cell(x + 1, y, world[x + 1][y].color, zoom);
+					show_cell(x + 1, y, prey, zoom);
 
 					world[x][y] = Cell();
-					show_cell(x, y, world[x][y].color, zoom);
+					show_cell(x, y, empty, zoom);
 
 					return;
 				}
@@ -162,10 +167,10 @@ void move_prey(std::vector<std::vector<Cell>>& world, int x, int y, int zoom)
 				if (i >= 0 and i < world.size() and j >= 0 and j < world.front().size() and y > 0 and world[i][j].type == plant and world[x][y - 1].type == empty)
 				{
 					world[x][y - 1] = world[x][y];
-					show_cell(x, y - 1, world[x][y - 1].color, zoom);
+					show_cell(x, y - 1, prey, zoom);
 
 					world[x][y] = Cell();
-					show_cell(x, y, world[x][y].color, zoom);
+					show_cell(x, y, empty, zoom);
 
 					return;
 				}
@@ -178,10 +183,10 @@ void move_prey(std::vector<std::vector<Cell>>& world, int x, int y, int zoom)
 				if (i >= 0 and i < world.front().size() and j >= 0 and j < world.size() and x > 0 and world[j][i].type == plant and world[x - 1][y].type == empty)
 				{
 					world[x - 1][y] = world[x][y];
-					show_cell(x - 1, y, world[x - 1][y].color, zoom);
+					show_cell(x - 1, y, prey, zoom);
 
 					world[x][y] = Cell();
-					show_cell(x, y, world[x][y].color, zoom);
+					show_cell(x, y, empty, zoom);
 
 					return;
 				}
@@ -191,6 +196,8 @@ void move_prey(std::vector<std::vector<Cell>>& world, int x, int y, int zoom)
 }
 
 
+
+// Fais manger une plante à une proie
 
 void eat_plant(std::vector<std::vector<Cell>>& world, int x, int y, int zoom)
 {
@@ -206,7 +213,7 @@ void eat_plant(std::vector<std::vector<Cell>>& world, int x, int y, int zoom)
 			if (x > 0 and world[x - 1][y].type == plant)
 			{
 				world[x - 1][y] = Cell();
-				show_cell(x - 1, y, world[x - 1][y].color, zoom);
+				show_cell(x - 1, y, empty, zoom);
 
 				return;
 			}
@@ -218,7 +225,7 @@ void eat_plant(std::vector<std::vector<Cell>>& world, int x, int y, int zoom)
 			if (y > 0 and world[x][y - 1].type == plant)
 			{
 				world[x][y - 1] = Cell();
-				show_cell(x, y - 1, world[x][y - 1].color, zoom);
+				show_cell(x, y - 1, empty, zoom);
 
 				return;
 			}
@@ -230,7 +237,7 @@ void eat_plant(std::vector<std::vector<Cell>>& world, int x, int y, int zoom)
 			if (y < world.front().size() - 1 and world[x][y + 1].type == plant)
 			{
 				world[x][y + 1] = Cell();
-				show_cell(x, y + 1, world[x][y + 1].color, zoom);
+				show_cell(x, y + 1, empty, zoom);
 
 				return;
 			}
@@ -242,7 +249,7 @@ void eat_plant(std::vector<std::vector<Cell>>& world, int x, int y, int zoom)
 			if (x < world.size() - 1 and world[x + 1][y].type == plant)
 			{
 				world[x + 1][y] = Cell();
-				show_cell(x + 1, y, world[x + 1][y].color, zoom);
+				show_cell(x + 1, y, empty, zoom);
 
 				return;
 			}
@@ -253,6 +260,8 @@ void eat_plant(std::vector<std::vector<Cell>>& world, int x, int y, int zoom)
 }
 
 
+
+// Crée une nouvelle proie à côté d'une autre
 
 void prey_make_kid(std::vector<std::vector<Cell>>& world, int x, int y, int zoom)
 {
@@ -278,7 +287,7 @@ void prey_make_kid(std::vector<std::vector<Cell>>& world, int x, int y, int zoom
 				if (i >= 0 and i < world.size() and j >= 0 and j < world.front().size() and y > 0 and world[i][j].type == empty)
 				{
 					world[i][j] = Cell(prey);
-					show_cell(i, j, world[i][j].color, zoom);
+					show_cell(i, j, prey, zoom);
 
 					return;
 				}
@@ -291,7 +300,7 @@ void prey_make_kid(std::vector<std::vector<Cell>>& world, int x, int y, int zoom
 				if (i >= 0 and i < world.front().size() and j >= 0 and j < world.size() and x > 0 and world[j][i].type == empty)
 				{
 					world[j][i] = Cell(prey);
-					show_cell(j, i, world[j][i].color, zoom);
+					show_cell(j, i, prey, zoom);
 
 					return;
 				}
@@ -304,7 +313,7 @@ void prey_make_kid(std::vector<std::vector<Cell>>& world, int x, int y, int zoom
 				if (i >= 0 and i < world.size() and j >= 0 and j < world.front().size() and y < world.front().size() - 1 and world[i][j].type == empty)
 				{
 					world[i][j] = Cell(prey);
-					show_cell(i, j, world[i][j].color, zoom);
+					show_cell(i, j, prey, zoom);
 
 					return;
 				}
@@ -317,7 +326,7 @@ void prey_make_kid(std::vector<std::vector<Cell>>& world, int x, int y, int zoom
 				if (i >= 0 and i < world.front().size() and j >= 0 and j < world.size() and x < world.size() - 1 and world[j][i].type == empty)
 				{
 					world[j][i] = Cell(prey);
-					show_cell(j, i, world[j][i].color, zoom);
+					show_cell(j, i, prey, zoom);
 
 					return;
 				}
@@ -333,7 +342,7 @@ void prey_make_kid(std::vector<std::vector<Cell>>& world, int x, int y, int zoom
 				if (i >= 0 and i < world.size() and j >= 0 and j < world.front().size() and y < world.front().size() - 1 and world[i][j].type == empty)
 				{
 					world[i][j] = Cell(prey);
-					show_cell(i, j, world[i][j].color, zoom);
+					show_cell(i, j, prey, zoom);
 
 					return;
 				}
@@ -346,7 +355,7 @@ void prey_make_kid(std::vector<std::vector<Cell>>& world, int x, int y, int zoom
 				if (i >= 0 and i < world.front().size() and j >= 0 and j < world.size() and x < world.size() - 1 and world[j][i].type == empty)
 				{
 					world[j][i] = Cell(prey);
-					show_cell(j, i, world[j][i].color, zoom);
+					show_cell(j, i, prey, zoom);
 
 					return;
 				}
@@ -359,7 +368,7 @@ void prey_make_kid(std::vector<std::vector<Cell>>& world, int x, int y, int zoom
 				if (i >= 0 and i < world.size() and j >= 0 and j < world.front().size() and y > 0 and world[i][j].type == empty)
 				{
 					world[i][j] = Cell(prey);
-					show_cell(i, j, world[i][j].color, zoom);
+					show_cell(i, j, prey, zoom);
 
 					return;
 				}
@@ -372,7 +381,7 @@ void prey_make_kid(std::vector<std::vector<Cell>>& world, int x, int y, int zoom
 				if (i >= 0 and i < world.front().size() and j >= 0 and j < world.size() and x > 0 and world[j][i].type == empty)
 				{
 					world[j][i] = Cell(prey);
-					show_cell(j, i, world[j][i].color, zoom);
+					show_cell(j, i, prey, zoom);
 
 					return;
 				}
