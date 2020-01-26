@@ -2,6 +2,9 @@
 #include "display.h"
 
 
+
+// Crée une case
+
 Cell::Cell()
 {
 	type = empty;
@@ -11,6 +14,10 @@ Cell::Cell()
 	color = BACKGROUND;
 }
 
+
+
+// Crée une case à partir d'une autre case
+
 Cell::Cell(const Cell& cell)
 {
 	type = cell.type;
@@ -19,6 +26,10 @@ Cell::Cell(const Cell& cell)
 	time_no_eat = cell.time_no_eat;
 	color = cell.color;
 }
+
+
+
+// Crée une case à partir d'un type donné
 
 Cell::Cell(Type type)
 {
@@ -40,6 +51,10 @@ Cell::Cell(Type type)
 		color = BACKGROUND;
 }
 
+
+
+// Assignation
+
 void Cell::operator=(const Cell& cell)
 {
 	type = cell.type;
@@ -51,9 +66,7 @@ void Cell::operator=(const Cell& cell)
 
 
 
-
-
-
+// Initialise le monde
 
 void initialize_world(std::vector<std::vector<Cell>>& world, int world_width, int world_height, int nb_plants, int nb_preys, int nb_predators, int zoom)
 {
@@ -108,6 +121,8 @@ void initialize_world(std::vector<std::vector<Cell>>& world, int world_width, in
 
 
 
+// Rajoute des cases de type plante autour des plantes déjà existantes
+
 void grow_plant(std::vector<std::vector<Cell>>& world, int x, int y, int growth_rate, int zoom)
 {
 	Cell cell = Cell(plant);
@@ -156,6 +171,8 @@ void grow_plant(std::vector<std::vector<Cell>>& world, int x, int y, int growth_
 
 
 
+// Enlève la sécurité qui empèche de prendre en compte plusieurs fois le même être vivant
+
 void update_world(std::vector<std::vector<Cell>>& world)
 {
 	for (int i = 0; i < world.size(); i++)
@@ -169,6 +186,8 @@ void update_world(std::vector<std::vector<Cell>>& world)
 }
 
 
+
+//Donne un ordre aléatoire de 4 valeurs
 
 std::vector<int> random_order_4()
 {

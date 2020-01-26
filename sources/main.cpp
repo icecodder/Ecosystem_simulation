@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
 	int predator_time_no_eat_max = 60;	// Temps que tient un prédateur sans manger
 	int predator_nb_eat_kid = 25;		// Nombre de proies qu'un prédateur doit manger pour faire un enfant
 
-	int frame_rate_max = 100000;		// FPS maximum (en images par seconde)
+	int frame_rate_max = 144;			// FPS maximum (en images par seconde)
 
 
 
@@ -69,8 +69,6 @@ int main(int argc, char* argv[])
 
 	initialize_world(world, world_width, world_height, nb_plants, nb_preys, nb_predators, zoom);
 
-	bool begin = true;
-
 	while (1)
 	{
 		clock_t start = clock();
@@ -79,7 +77,7 @@ int main(int argc, char* argv[])
 		number_preys = 0;
 		number_predators = 0;
 
-		for (int i = 0; i < world.size(); i++)
+		for (int i = 0; i < world.size(); i++) // Boucle pour compter chaques types d'êtres vivants
 		{
 			for (int j = 0; j < world[0].size(); j++)
 			{
@@ -95,9 +93,9 @@ int main(int argc, char* argv[])
 		}
 
 		if (file_.is_open())
-			file_ << number_plants << ", " << number_preys << ", " << number_predators << "\n";
+			file_ << number_plants << ", " << number_preys << ", " << number_predators << "\n"; // Remplie de fichier data.txt
 
-		for (int i = 0; i < world.size(); i++)
+		for (int i = 0; i < world.size(); i++) // Boucle du pas de temps de la simulation
 		{
 			for (int j = 0; j < world[0].size(); j++)
 			{
@@ -127,12 +125,6 @@ int main(int argc, char* argv[])
 
 		if (clock() - start < (1. / (double)frame_rate_max) * 1000.)
 			Sleep(((1. / (double)frame_rate_max) * 1000.) - (clock() - start));
-
-		if (begin)
-		{
-			Sleep(1000);
-			begin = false;
-		}
 	}
 
 	if (renderer)
