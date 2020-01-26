@@ -1,4 +1,4 @@
-# Projet
+# Ecosystem_simulation
 
 ![release](https://img.shields.io/badge/release-v1.0-blueviolet)
 ![language](https://img.shields.io/badge/language-C%2B%2B-0052cf)
