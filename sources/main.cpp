@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
 	int predator_time_no_eat_max = 60;	// Temps que tient un prédateur sans manger
 	int predator_nb_eat_kid = 25;		// Nombre de proies qu'un prédateur doit manger pour faire un enfant
 
-	int frame_rate_max = 30;			// FPS maximum (en images par seconde)
+	int frame_rate_max = 144;			// FPS maximum (en images par seconde)
 
 
 
