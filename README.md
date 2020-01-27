@@ -31,10 +31,10 @@ int world_width = 320;              // Largeur du monde (en cases)
 int world_height = 180;             // Hateur du monde (en cases)
 int zoom = 6;                       // Taille des cases (en pixels)
 
-int nb_plants = 150;                // Nombre de plantes au début
+int nb_plants = 160;                // Nombre de plantes au début
 int growth_rate = 15;               // Vitesse de l'évolution des plantes (en pourcents)
 
-int nb_preys = 150;                 // Nombre de proies au début
+int nb_preys = 160;                 // Nombre de proies au début
 int prey_time_no_eat_max = 30;      // Temps que tient une proie sans manger
 int prey_nb_eat_kid = 15;           // Nombre de plantes qu'une proie doit manger pour faire un enfant
 
@@ -74,6 +74,8 @@ Vous pouvez tester directement le programme sans installation en consultant les 
 # Crédits
 
 * [Angel Uriot](https://github.com/angeluriot) : Créateur du projet.
+
+* [ShiroW](https://github.com/mbourand) : Aide à l'optimisation.
 
 <br/>
 
