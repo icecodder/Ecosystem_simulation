@@ -168,6 +168,28 @@ void update_world(std::vector<std::vector<Cell>>& world)
 
 
 
+// Donne 1 si la valeur est positive et -1 si la valeur est négative
+
+int sign(int value)
+{
+	if (value >= 0)
+		return 1;
+
+	else
+		return -1;
+}
+
+
+
+// Indique si on peut se déplacer sur cette case
+
+int is_walkable(Type type)
+{
+	return (type == empty or type == plant);
+}
+
+
+
 // Donne un ordre aléatoire de 4 valeurs
 
 std::vector<int> random_order_4()

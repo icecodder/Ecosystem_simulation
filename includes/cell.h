@@ -34,6 +34,8 @@ public:
 void initialize_world(std::vector<std::vector<Cell>>& world, int world_width, int world_height, int nb_plants, int nb_preys, int nb_predators, int zoom);
 void grow_plant(std::vector<std::vector<Cell>>& world, int x, int y, int growth_rate, int zoom);
 void update_world(std::vector<std::vector<Cell>>& world);
+int sign(int value);
+int is_walkable(Type type);
 std::vector<int> random_order_4();
 
 #endif

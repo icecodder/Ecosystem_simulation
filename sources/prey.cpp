@@ -3,7 +3,7 @@
 
 
 
-// Met à jour l'état d'une proie
+// Met Ã  jour l'Ã©tat d'une proie
 
 void update_prey(std::vector<std::vector<Cell>>& world, int x, int y, int zoom, int prey_time_no_eat_max, int prey_nb_eat_kid, int number_plants)
 {
@@ -18,7 +18,7 @@ void update_prey(std::vector<std::vector<Cell>>& world, int x, int y, int zoom, 
 
 	if (world[x][y].nb_eat >= prey_nb_eat_kid)
 	{
-		prey_make_kid(world, x, y, zoom);
+		prey_make_kid(world, x, y, zoom, 1);
 		world[x][y].nb_eat = 0;
 		return;
 	}
@@ -33,7 +33,7 @@ void update_prey(std::vector<std::vector<Cell>>& world, int x, int y, int zoom, 
 	else if (number_plants > 0)
 	{
 		world[x][y].time_no_eat++;
-		move_prey(world, x, y, zoom);
+		move_prey(world, x, y, zoom, 1);
 	}
 
 	else
@@ -44,160 +44,108 @@ void update_prey(std::vector<std::vector<Cell>>& world, int x, int y, int zoom, 
 
 // Fais bouger une proie vers la plante la plus proche
 
-void move_prey(std::vector<std::vector<Cell>>& world, int x, int y, int zoom)
+int move_prey(std::vector<std::vector<Cell>>& world, int x, int y, int zoom, int off)
 {
-	int max_size;
-	int j;
-	bool random_1 = rand() % 2;
-	bool random_2 = rand() % 2;
+	Cell temp = Cell();
+	int offset = off * (rand() % 2 == 0 ? -1 : 1);
+	bool priority = rand() % 2;
 
-	if (world.front().size() > world.size())
-		max_size = world.front().size();
+	if ((x + 1 >= world.size() or !is_walkable(world[x + 1][y].type)) and (x - 1 < 0 or !is_walkable(world[x - 1][y].type)) and (y + 1 >= world.front().size() or !is_walkable(world[x][y + 1].type)) and (y - 1 < 0 or !is_walkable(world[x][y - 1].type)))
+		return (-1);
 
-	else
-		max_size = world.size();
-
-	for (int size = 1; size < max_size; size++)
+	if (!priority)
 	{
-		if (random_2)
+		for (int x_off = -off; x_off <= off; x_off++)
 		{
-			for (int i = x - (size - random_1); i <= x + (size - random_1); i++)
+			if (y - offset < world.front().size() and y - offset >= 0 and x + x_off >= 0 and x + x_off < world.size() and world[x + x_off][y - offset].type == plant and (world[x][y - sign(offset)].type == empty or world[x][y - sign(offset)].type == plant))
 			{
-				j = y - size;
+				world[x][y - sign(offset)] = world[x][y];
+				show_cell(x, y - sign(offset), prey, zoom);
 
-				if (i >= 0 and i < world.size() and j >= 0 and j < world.front().size() and y > 0 and world[i][j].type == plant and world[x][y - 1].type == empty)
-				{
-					world[x][y - 1] = world[x][y];
-					show_cell(x, y - 1, prey, zoom);
+				world[x][y] = temp;
+				show_cell(x, y, world[x][y].type, zoom);
 
-					world[x][y] = Cell();
-					show_cell(x, y, empty, zoom);
-
-					return;
-				}
+				return 1;
 			}
 
-			for (int i = y - (size - !random_1); i <= y + (size - !random_1); i++)
+			if (y + offset >= 0 and y + offset < world.front().size() and x + x_off >= 0 and x + x_off < world.size() and world[x + x_off][y + offset].type == plant and (world[x][y + sign(offset)].type == empty or world[x][y + sign(offset)].type == plant))
 			{
-				j = x - size;
+				world[x][y + sign(offset)] = world[x][y];
+				show_cell(x, y + sign(offset), prey, zoom);
 
-				if (i >= 0 and i < world.front().size() and j >= 0 and j < world.size() and x > 0 and world[j][i].type == plant and world[x - 1][y].type == empty)
-				{
-					world[x - 1][y] = world[x][y];
-					show_cell(x - 1, y, prey, zoom);
+				world[x][y] = temp;
+				show_cell(x, y, world[x][y].type, zoom);
 
-					world[x][y] = Cell();
-					show_cell(x, y, empty, zoom);
-
-					return;
-				}
-			}
-
-			for (int i = x - (size - random_1); i <= x + (size - random_1); i++)
-			{
-				j = y + size;
-
-				if (i >= 0 and i < world.size() and j >= 0 and j < world.front().size() and y < world.front().size() - 1 and world[i][j].type == plant and world[x][y + 1].type == empty)
-				{
-					world[x][y + 1] = world[x][y];
-					show_cell(x, y + 1, prey, zoom);
-
-					world[x][y] = Cell();
-					show_cell(x, y, empty, zoom);
-
-					return;
-				}
-			}
-
-			for (int i = y - (size - !random_1); i <= y + (size - !random_1); i++)
-			{
-				j = x + size;
-
-				if (i >= 0 and i < world.front().size() and j >= 0 and j < world.size() and x < world.size() - 1 and world[j][i].type == plant and world[x + 1][y].type == empty)
-				{
-					world[x + 1][y] = world[x][y];
-					show_cell(x + 1, y, prey, zoom);
-
-					world[x][y] = Cell();
-					show_cell(x, y, empty, zoom);
-
-					return;
-				}
+				return 1;
 			}
 		}
 
-		else
+		offset = off * (rand() % 2 == 0 ? -1 : 1);
+	}
+
+	for (int y_off = -off; y_off <= off; y_off++)
+	{
+		if (x - offset < world.size() and x - offset >= 0 and y + y_off >= 0 and y + y_off < world.front().size() and world[x - offset][y + y_off].type == plant and (world[x - sign(offset)][y].type == empty or world[x - sign(offset)][y].type == plant))
 		{
-			for (int i = x - (size - random_1); i <= x + (size - random_1); i++)
+			world[x - sign(offset)][y] = world[x][y];
+			show_cell(x - sign(offset), y, prey, zoom);
+
+			world[x][y] = temp;
+			show_cell(x, y, world[x][y].type, zoom);
+
+			return 1;
+		}
+
+		if (x + offset >= 0 and x + offset < world.size() and y + y_off >= 0 and y + y_off < world.front().size() and world[x + offset][y + y_off].type == plant and (world[x + sign(offset)][y].type == empty or world[x + sign(offset)][y].type == plant))
+		{
+			world[x + sign(offset)][y] = world[x][y];
+			show_cell(x + sign(offset), y, prey, zoom);
+
+			world[x][y] = temp;
+			show_cell(x, y, world[x][y].type, zoom);
+
+			return 1;
+		}
+	}
+
+	if (priority)
+	{
+		offset = off * (rand() % 2 == 0 ? -1 : 1);
+		for (int x_off = -off; x_off <= off; x_off++)
+		{
+			if (y - offset < world.front().size() and y - offset >= 0 and x + x_off >= 0 and x + x_off < world.size() and world[x + x_off][y - offset].type == plant and (world[x][y - sign(offset)].type == empty or world[x][y - sign(offset)].type == plant))
 			{
-				j = y + size;
+				world[x][y - sign(offset)] = world[x][y];
+				show_cell(x, y - sign(offset), prey, zoom);
 
-				if (i >= 0 and i < world.size() and j >= 0 and j < world.front().size() and y < world.front().size() - 1 and world[i][j].type == plant and world[x][y + 1].type == empty)
-				{
-					world[x][y + 1] = world[x][y];
-					show_cell(x, y + 1, prey, zoom);
+				world[x][y] = temp;
+				show_cell(x, y, world[x][y].type, zoom);
 
-					world[x][y] = Cell();
-					show_cell(x, y, empty, zoom);
-
-					return;
-				}
+				return 1;
 			}
 
-			for (int i = y - (size - !random_1); i <= y + (size - !random_1); i++)
+			if (y + offset >= 0 and y + offset < world.front().size() and x + x_off >= 0 and x + x_off < world.size() and world[x + x_off][y + offset].type == plant and (world[x][y + sign(offset)].type == empty or world[x][y + sign(offset)].type == plant))
 			{
-				j = x + size;
+				world[x][y + sign(offset)] = world[x][y];
+				show_cell(x, y + sign(offset), prey, zoom);
 
-				if (i >= 0 and i < world.front().size() and j >= 0 and j < world.size() and x < world.size() - 1 and world[j][i].type == plant and world[x + 1][y].type == empty)
-				{
-					world[x + 1][y] = world[x][y];
-					show_cell(x + 1, y, prey, zoom);
+				world[x][y] = temp;
+				show_cell(x, y, world[x][y].type, zoom);
 
-					world[x][y] = Cell();
-					show_cell(x, y, empty, zoom);
-
-					return;
-				}
-			}
-
-			for (int i = x - (size - random_1); i <= x + (size - random_1); i++)
-			{
-				j = y - size;
-
-				if (i >= 0 and i < world.size() and j >= 0 and j < world.front().size() and y > 0 and world[i][j].type == plant and world[x][y - 1].type == empty)
-				{
-					world[x][y - 1] = world[x][y];
-					show_cell(x, y - 1, prey, zoom);
-
-					world[x][y] = Cell();
-					show_cell(x, y, empty, zoom);
-
-					return;
-				}
-			}
-
-			for (int i = y - (size - !random_1); i <= y + (size - !random_1); i++)
-			{
-				j = x - size;
-
-				if (i >= 0 and i < world.front().size() and j >= 0 and j < world.size() and x > 0 and world[j][i].type == plant and world[x - 1][y].type == empty)
-				{
-					world[x - 1][y] = world[x][y];
-					show_cell(x - 1, y, prey, zoom);
-
-					world[x][y] = Cell();
-					show_cell(x, y, empty, zoom);
-
-					return;
-				}
+				return 1;
 			}
 		}
 	}
+
+	if (x - off < 0 and x + off >= world.size() and y - off < 0 and y + off >= world.front().size())
+		return -1;
+
+	return move_prey(world, x, y, zoom, off + 1);
 }
 
 
 
-// Fais manger une plante à une proie
+// Fais manger une plante Ã  une proie
 
 void eat_plant(std::vector<std::vector<Cell>>& world, int x, int y, int zoom)
 {
@@ -261,131 +209,68 @@ void eat_plant(std::vector<std::vector<Cell>>& world, int x, int y, int zoom)
 
 
 
-// Crée une nouvelle proie à côté d'une autre
+// CrÃ©e une nouvelle proie Ã  cÃ´tÃ© d'une autre
 
-void prey_make_kid(std::vector<std::vector<Cell>>& world, int x, int y, int zoom)
+int prey_make_kid(std::vector<std::vector<Cell>>& world, int x, int y, int zoom, int off)
 {
-	int max_size;
-	int j;
-	bool random_1 = rand() % 2;
-	bool random_2 = rand() % 2;
+	int offset = off * (rand() % 2 == 0 ? -1 : 1);
+	bool priority = rand() % 2;
 
-	if (world.front().size() > world.size())
-		max_size = world.front().size();
-
-	else
-		max_size = world.size();
-
-	for (int size = 1; size < max_size; size++)
+	if (!priority)
 	{
-		if (random_2)
+		for (int x_off = -off; x_off <= off; x_off++)
 		{
-			for (int i = x - (size - random_1); i <= x + (size - random_1); i++)
+			if (y - offset < world.front().size() and y - offset >= 0 and x + x_off >= 0 and x + x_off < world.size() and (world[x + x_off][y - offset].type == empty or world[x + x_off][y - offset].type == plant))
 			{
-				j = y - size;
-
-				if (i >= 0 and i < world.size() and j >= 0 and j < world.front().size() and y > 0 and world[i][j].type == empty)
-				{
-					world[i][j] = Cell(prey);
-					show_cell(i, j, prey, zoom);
-
-					return;
-				}
+				world[x + x_off][y - offset] = Cell(prey);
+				return 1;
 			}
-
-			for (int i = y - (size - !random_1); i <= y + (size - !random_1); i++)
+			if (y + offset >= 0 and y + offset < world.front().size() and x + x_off >= 0 and x + x_off < world.size() and (world[x + x_off][y + offset].type == empty or world[x + x_off][y + offset].type == plant))
 			{
-				j = x - size;
-
-				if (i >= 0 and i < world.front().size() and j >= 0 and j < world.size() and x > 0 and world[j][i].type == empty)
-				{
-					world[j][i] = Cell(prey);
-					show_cell(j, i, prey, zoom);
-
-					return;
-				}
-			}
-
-			for (int i = x - (size - random_1); i <= x + (size - random_1); i++)
-			{
-				j = y + size;
-
-				if (i >= 0 and i < world.size() and j >= 0 and j < world.front().size() and y < world.front().size() - 1 and world[i][j].type == empty)
-				{
-					world[i][j] = Cell(prey);
-					show_cell(i, j, prey, zoom);
-
-					return;
-				}
-			}
-
-			for (int i = y - (size - !random_1); i <= y + (size - !random_1); i++)
-			{
-				j = x + size;
-
-				if (i >= 0 and i < world.front().size() and j >= 0 and j < world.size() and x < world.size() - 1 and world[j][i].type == empty)
-				{
-					world[j][i] = Cell(prey);
-					show_cell(j, i, prey, zoom);
-
-					return;
-				}
+				world[x + x_off][y + offset] = Cell(prey);
+				return 1;
 			}
 		}
 
-		else
+		offset = off * (rand() % 2 == 0 ? -1 : 1);
+	}
+
+	for (int y_off = -off; y_off <= off; y_off++)
+	{
+		if (x - offset < world.size() and x - offset >= 0 and y + y_off >= 0 and y + y_off < world.front().size() and (world[x - offset][y + y_off].type == empty or world[x - offset][y + y_off].type == plant))
 		{
-			for (int i = x - (size - random_1); i <= x + (size - random_1); i++)
+			world[x - offset][y + y_off] = Cell(prey);
+			return 1;
+		}
+
+		if (x + offset >= 0 and x + offset < world.size() and y + y_off >= 0 and y + y_off < world.front().size() and (world[x + offset][y + y_off].type == empty or world[x + offset][y + y_off].type == plant))
+		{
+			world[x + offset][y + y_off] = Cell(prey);
+			return 1;
+		}
+	}
+
+	if (priority)
+	{
+		offset = off * (rand() % 2 == 0 ? -1 : 1);
+		for (int x_off = -off; x_off <= off; x_off++)
+		{
+			if (y - offset < world.front().size() and y - offset >= 0 and x + x_off >= 0 and x + x_off < world.size() and (world[x + x_off][y - offset].type == empty or world[x + x_off][y - offset].type == plant))
 			{
-				j = y + size;
-
-				if (i >= 0 and i < world.size() and j >= 0 and j < world.front().size() and y < world.front().size() - 1 and world[i][j].type == empty)
-				{
-					world[i][j] = Cell(prey);
-					show_cell(i, j, prey, zoom);
-
-					return;
-				}
+				world[x + x_off][y - offset] = Cell(prey);
+				return 1;
 			}
 
-			for (int i = y - (size - !random_1); i <= y + (size - !random_1); i++)
+			if (y + offset >= 0 and y + offset < world.front().size() and x + x_off >= 0 and x + x_off < world.size() and (world[x + x_off][y + offset].type == empty or world[x + x_off][y + offset].type == plant))
 			{
-				j = x + size;
-
-				if (i >= 0 and i < world.front().size() and j >= 0 and j < world.size() and x < world.size() - 1 and world[j][i].type == empty)
-				{
-					world[j][i] = Cell(prey);
-					show_cell(j, i, prey, zoom);
-
-					return;
-				}
-			}
-
-			for (int i = x - (size - random_1); i <= x + (size - random_1); i++)
-			{
-				j = y - size;
-
-				if (i >= 0 and i < world.size() and j >= 0 and j < world.front().size() and y > 0 and world[i][j].type == empty)
-				{
-					world[i][j] = Cell(prey);
-					show_cell(i, j, prey, zoom);
-
-					return;
-				}
-			}
-
-			for (int i = y - (size - !random_1); i <= y + (size - !random_1); i++)
-			{
-				j = x - size;
-
-				if (i >= 0 and i < world.front().size() and j >= 0 and j < world.size() and x > 0 and world[j][i].type == empty)
-				{
-					world[j][i] = Cell(prey);
-					show_cell(j, i, prey, zoom);
-
-					return;
-				}
+				world[x + x_off][y + offset] = Cell(prey);
+				return 1;
 			}
 		}
 	}
+
+	if (x - off < 0 and x + off >= world.size() and y - off < 0 and y + off >= world.front().size())
+		return -1;
+
+	return prey_make_kid(world, x, y, zoom, off + 1);
 }

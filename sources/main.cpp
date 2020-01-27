@@ -24,10 +24,10 @@ int main(int argc, char* argv[])
 	int	world_height = 180;				// Hateur du monde (en cases)
 	int	zoom = 6;						// Taille des cases (en pixels)
 
-	int	nb_plants = 150;				// Nombre de plantes au début
+	int	nb_plants = 160;				// Nombre de plantes au début
 	int	growth_rate = 15;				// Vitesse de l'évolution des plantes (en pourcents)
 
-	int	nb_preys = 150;					// Nombre de proies au début
+	int	nb_preys = 160;					// Nombre de proies au début
 	int prey_time_no_eat_max = 30;		// Temps que tient une proie sans manger
 	int prey_nb_eat_kid = 15;			// Nombre de plantes qu'une proie doit manger pour faire un enfant
 
@@ -35,13 +35,27 @@ int main(int argc, char* argv[])
 	int predator_time_no_eat_max = 60;	// Temps que tient un prédateur sans manger
 	int predator_nb_eat_kid = 25;		// Nombre de proies qu'un prédateur doit manger pour faire un enfant
 
-	int frame_rate_max = 144;			// FPS maximum (en images par seconde)
+	int frame_rate_max = 30;			// FPS maximum (en images par seconde)
 
 
 
 	// -------------------------------------------------------------------------------
 
 
+
+	if (world_width < 1) world_width = 1;
+	if (world_height < 1) world_height = 1;
+	if (zoom < 1) zoom = 1;
+	if (nb_plants < 0) nb_plants = 0;
+	if (growth_rate < 0) growth_rate = 0;
+	if (growth_rate > 100) growth_rate = 100;
+	if (nb_preys < 0) nb_preys = 0;
+	if (prey_time_no_eat_max < 1) prey_time_no_eat_max = 1;
+	if (prey_nb_eat_kid < 1) prey_nb_eat_kid = 1;
+	if (nb_predators < 0) nb_predators = 0;
+	if (predator_time_no_eat_max < 1) predator_time_no_eat_max = 1;
+	if (predator_nb_eat_kid < 1) predator_nb_eat_kid = 1;
+	if (frame_rate_max < 1) frame_rate_max = 1;
 
 	std::ofstream file_;
 	file_.open("data.txt");
@@ -69,6 +83,8 @@ int main(int argc, char* argv[])
 
 	initialize_world(world, world_width, world_height, nb_plants, nb_preys, nb_predators, zoom);
 
+	bool stop = true;
+
 	while (1)
 	{
 		clock_t start = clock();
@@ -90,6 +106,29 @@ int main(int argc, char* argv[])
 				if (world[i][j].type == predator)
 					number_predators++;
 			}
+		}
+
+		if (stop)
+		{
+			for (int i = 0; i < world.size(); i++) // Boucle pour compter chaques types d'êtres vivants
+			{
+				for (int j = 0; j < world[0].size(); j++)
+				{
+					if (world[i][j].type == plant)
+						show_cell(i, j, plant, zoom);
+
+					if (world[i][j].type == prey)
+						show_cell(i, j, prey, zoom);
+
+					if (world[i][j].type == predator)
+						show_cell(i, j, predator, zoom);
+				}
+			}
+
+			SDL_RenderPresent(renderer);
+
+			Sleep(1000);
+			stop = false;
 		}
 
 		if (file_.is_open())
