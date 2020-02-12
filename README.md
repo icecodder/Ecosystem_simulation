@@ -75,7 +75,7 @@ Vous pouvez tester directement le programme sans installation en consultant les 
 
 * [Angel Uriot](https://github.com/angeluriot) : Créateur du projet.
 
-* [ShiroW](https://github.com/mbourand) : Aide à l'optimisation.
+* [Maxime Bourand](https://github.com/mbourand) : Aide à l'optimisation.
 
 <br/>
 
