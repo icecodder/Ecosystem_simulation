@@ -28,7 +28,7 @@ de code permettant de modifier les différents paramètres de la simulation :
 // ------------------------- Paramètres de la simulation -------------------------
 
 int world_width = 320;              // Largeur du monde (en cases)
-int world_height = 180;             // Hateur du monde (en cases)
+int world_height = 180;             // Hauteur du monde (en cases)
 int zoom = 6;                       // Taille des cases (en pixels)
 
 int nb_plants = 160;                // Nombre de plantes au début
